@@ -114,5 +114,4 @@ spec:
   maturity: alpha
   provider:
     name: Red Hat, Inc
-  replaces: certman-operator.v0.1.13-cf6a2d4
   version: 0.1.14-0a5e2b8
