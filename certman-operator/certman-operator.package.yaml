@@ -1,4 +1,4 @@
 packageName: certman-operator
 channels:
 - name: staging
-  currentCSV: certman-operator.v0.1.71-bff7177
+  currentCSV: certman-operator.v0.1.75-a4697c1

@@ -1,0 +1,131 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    categories: A list of comma separated categories that your operator falls under.
+    certified: 'false'
+    containerImage: quay.io/app-sre/certman-operator:latest
+    createdAt: '2019-05-15T00:05:55Z'
+    description: Operator to Manage Let's Encrypt certificates for OpenShift Clusters.
+    support: Tejas Parikh
+  name: certman-operator.v0.1.75-a4697c1
+  namespace: placeholder
+spec:
+  customresourcedefinitions:
+    owned:
+    - description: Let's Encrypt Certificate Request for OpenShift Clusters
+      displayName: Certificate Request
+      kind: CertificateRequest
+      name: certificaterequests.certman.managed.openshift.io
+      version: v1alpha1
+  description: Operator to Manage Let's Encrypt certificates for OpenShift Clusters.
+  displayName: certman-operator
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - ''
+          resources:
+          - pods
+          - services
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ''
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - certman.managed.openshift.io
+          resources:
+          - '*'
+          - certificaterequests
+          verbs:
+          - '*'
+        - apiGroups:
+          - hive.openshift.io
+          attributeRestrictions: null
+          resources:
+          - clusterdeployments
+          - clusterdeployments/finalizers
+          - clusterdeployments/status
+          verbs:
+          - get
+          - list
+          - watch
+          - update
+          - patch
+        serviceAccountName: certman-operator
+      deployments:
+      - name: certman-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: certman-operator
+          template:
+            metadata:
+              labels:
+                name: certman-operator
+            spec:
+              containers:
+              - command:
+                - certman-operator
+                env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: certman-operator
+                image: quay.io/app-sre/certman-operator:a4697c1
+                imagePullPolicy: Always
+                name: certman-operator
+              serviceAccountName: certman-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: false
+    type: AllNamespaces
+  keywords:
+  - kubernetes
+  - openshift
+  - multi-cluster
+  - cluster
+  maturity: alpha
+  provider:
+    name: Red Hat, Inc
+  replaces: certman-operator.v0.1.71-bff7177
+  version: 0.1.75-a4697c1
