@@ -1,4 +1,4 @@
 packageName: certman-operator
 channels:
 - name: production
-  currentCSV: certman-operator.v0.1.82-aba84c9
+  currentCSV: certman-operator.v0.1.84-a086c17
